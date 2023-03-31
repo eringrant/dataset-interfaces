@@ -335,8 +335,8 @@ def run_textual_inversion(
         for step, batch in enumerate(train_dataloader):
             with accelerator.accumulate(text_encoder):
                 
-                if revision == "fp16":
-                    batch["pixel_values"] = batch["pixel_values"].type(torch.float16)
+                #if revision == "fp16":
+                #    batch["pixel_values"] = batch["pixel_values"].type(torch.float16)
                     
                 # Convert images to latent space
                 latents = vae.encode(batch["pixel_values"]).latent_dist.sample().detach()
@@ -345,8 +345,8 @@ def run_textual_inversion(
                 # Sample noise that we'll add to the latents
                 noise = torch.randn(latents.shape).to(latents.device)
                 
-                if revision == "fp16":
-                    noise = noise.type(torch.float16)
+                #if revision == "fp16":
+                #    noise = noise.type(torch.float16)
                     
                 bsz = latents.shape[0]
                 # Sample a random timestep for each image
@@ -361,8 +361,8 @@ def run_textual_inversion(
                 # Get the text embedding for conditioning
                 encoder_hidden_states = text_encoder(batch["input_ids"])[0]
                 
-                if revision == "fp16":
-                    encoder_hidden_states = encoder_hidden_states.type(torch.float16)
+                #if revision == "fp16":
+                #    encoder_hidden_states = encoder_hidden_states.type(torch.float16)
                 
                 # Predict the noise residual                
                 model_pred = unet(noisy_latents, timesteps, encoder_hidden_states).sample
